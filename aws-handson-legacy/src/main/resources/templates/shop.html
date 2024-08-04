@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ショップ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen w-screen flex flex-col">
+<div class="w-full h-16 bg-slate-100 flex items-center justify-end gap-2 px-5">
+    <span th:text="|ようこそ、 ${session.user.name} さん。|">ようこそ、 {username} さん。</span>
+    <a href="/shop/cart">
+        <img alt="" src="../static/images/cart.png" th:src="@{/images/cart.png}" class="w-7 h-7"/>
+        <div th:if="${session.cart != null and #lists.size(session.cart) >= 1}" class="w-5 h-5 bg-indigo-200 rounded-full absolute top-2 right-4 flex items-center justify-center">
+            <span class="text-xs" th:text="${#lists.size(session.cart)}"></span>
+        </div>
+    </a>
+</div>
+<div class="h-full w-[894px] mx-auto px-32 mt-10">
+    <div class="grid grid-cols-3 gap-x-7 gap-y-12">
+        <div class="flex flex-col items-center" th:each="item : ${items}">
+            <div class="bg-slate-100 w-full h-32 py-6 rounded-lg">
+
+            </div>
+            <div class="flex w-full mt-3 px-2">
+                <div th:text="${item.name}" class="text-lg">
+                    {itemName}
+                </div>
+                <form action="/shop/cart" method="post" class="w-full flex justify-end">
+                    <input type="hidden" name="id" th:value="${item.id}">
+                    <button class="rounded-full bg-indigo-200 p-2 justify-end hover:bg-indigo-300 w-fit h-fit">
+                        <img alt="" src="../static/images/cart.png" th:src="@{/images/cart.png}" class="w-5 h-5"/>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

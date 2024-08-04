@@ -1,0 +1,22 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+#キャッシュ用の環境変数とredisのコンテナを追加
+    environment:
+      CACHE_HOST: redis
+      CACHE_PORT: "6379"
+  redis:
+    image: public.ecr.aws/docker/library/redis:6.2
+    ports:
+     - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
